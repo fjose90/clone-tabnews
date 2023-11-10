@@ -1,4 +1,4 @@
 function Home(params) {
-  return <h1>Curso de Filipe</h1>;
+  return <h1>Se vc me ama dê uma risadinha</h1>;
 }
 export default Home;
