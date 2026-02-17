@@ -1,25 +1,16 @@
-import { createRouter } from "next-connect";
 import migrationRunner from "node-pg-migrate";
 import { resolve } from "node:path";
 import database from "infra/database.js";
-import controller from "infra/controller.js";
-
-const router = createRouter();
-
-router.get(getHandler);
-router.post(postHandler);
-
-export default router.handler(controller.errorHandlers);
 
 const defaultMigrationOptions = {
   dryRun: true,
   dir: resolve("infra", "migrations"),
   direction: "up",
-  verbose: true,
+  log: () => {},
   migrationsTable: "pgmigrations",
 };
 
-async function getHandler(request, response) {
+async function listPendingMigrations() {
   let dbClient;
 
   try {
@@ -29,13 +20,13 @@ async function getHandler(request, response) {
       ...defaultMigrationOptions,
       dbClient,
     });
-    return response.status(200).json(pendingMigrations);
+    return pendingMigrations;
   } finally {
-    await dbClient.end();
+    await dbClient?.end();
   }
 }
 
-async function postHandler(request, response) {
+async function runPendingMigrations() {
   let dbClient;
 
   try {
@@ -47,12 +38,15 @@ async function postHandler(request, response) {
       dryRun: false,
     });
 
-    if (migratedMigrations.length > 0) {
-      return response.status(201).json(migratedMigrations);
-    }
-
-    return response.status(200).json(migratedMigrations);
+    return migratedMigrations;
   } finally {
-    await dbClient.end();
+    await dbClient?.end();
   }
 }
+
+const migrator = {
+  listPendingMigrations,
+  runPendingMigrations,
+};
+
+export default migrator;
