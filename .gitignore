@@ -1,2 +1,24 @@
-.next
-node_modules
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Test and coverage output
+coverage/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# IDE settings
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
