@@ -5,10 +5,6 @@ node_modules/
 .next/
 out/
 
-# Environment variables
-.env*
-!.env.example
-
 # Test and coverage output
 coverage/
 
